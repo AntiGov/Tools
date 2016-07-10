@@ -1,7 +1,0 @@
- [+] ESSID      >> WIFI
- [+] BSSID      >> 18:17:25:30:D6:F6
- [+] Channel    >> 1
- [+] PIN        >> "73427537"
- [+] Key        >> "20162017."
- [+] Time Taken >> 252 s 726 ms
- [+] Date       >> Thu Jul  7 12:07:52 EDT 2016

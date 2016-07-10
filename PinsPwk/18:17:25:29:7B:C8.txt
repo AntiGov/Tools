@@ -1,7 +1,0 @@
- [+] ESSID      >> TNCAP297BC8
- [+] BSSID      >> 18:17:25:29:7B:C8
- [+] Channel    >> 11
- [+] PIN        >> "24530583"
- [+] Key        >> "hhhhhhhh"
- [+] Time Taken >> 4 s 461 ms
- [+] Date       >> Wed Jul  6 14:24:40 EDT 2016

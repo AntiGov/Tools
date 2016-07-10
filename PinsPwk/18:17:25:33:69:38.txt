@@ -1,7 +1,0 @@
- [+] ESSID      >> TNCAP336938
- [+] BSSID      >> 18:17:25:33:69:38
- [+] Channel    >> 5
- [+] PIN        >> "96125670"
- [+] Key        >> "81A410DDD9"
- [+] Time Taken >> 4 s 775 ms
- [+] Date       >> Fri Jun 24 08:35:43 EDT 2016

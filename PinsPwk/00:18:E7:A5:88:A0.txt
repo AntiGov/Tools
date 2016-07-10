@@ -1,0 +1,7 @@
+ [+] ESSID      >> TNCAPA588A0
+ [+] BSSID      >> 00:18:E7:A5:88:A0
+ [+] Channel    >> 1
+ [+] PIN        >> "58687932"
+ [+] Key        >> "AC79010DC5"
+ [+] Time Taken >> 247 s 346 ms
+ [+] Date       >> Sun Jun 26 16:40:59 EDT 2016

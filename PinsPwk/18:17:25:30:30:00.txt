@@ -1,0 +1,7 @@
+ [+] ESSID      >> TNCAP303000
+ [+] BSSID      >> 18:17:25:30:30:00
+ [+] Channel    >> 6
+ [+] PIN        >> "46045911"
+ [+] Key        >> "F5B202CC8F"
+ [+] Time Taken >> 4 s 718 ms
+ [+] Date       >> Wed Jul  6 14:48:41 EDT 2016

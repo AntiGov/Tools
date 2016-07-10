@@ -1,0 +1,7 @@
+ [+] ESSID      >> TNCAP3225F0
+ [+] BSSID      >> 18:17:25:32:25:F0
+ [+] Channel    >> 9
+ [+] PIN        >> "65308783"
+ [+] Key        >> ""
+ [+] Time Taken >> 8 s 288 ms
+ [+] Date       >> Sat Jul  9 11:21:15 EDT 2016

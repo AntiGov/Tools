@@ -1,0 +1,7 @@
+ [+] ESSID      >> Cafe •Sarbout•
+ [+] BSSID      >> 18:17:25:2C:D2:C4
+ [+] Channel    >> 11
+ [+] PIN        >> "24189378"
+ [+] Key        >> ""
+ [+] Time Taken >> 4 s 916 ms
+ [+] Date       >> Sat Jul  9 12:42:41 EDT 2016

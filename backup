@@ -1,0 +1,15 @@
+#!/bin/bash
+########################
+#backup Script by G66k##
+########################
+
+sudo tar -cvzf /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz --exclude=*.tar.gz --exclude=/var/www/backups /var/www > /var/www/backups/$(date +"%Y-%m-%d").log
+sudo zip /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz.zip -e -P allahallah /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz
+sudo find /var/www/backups/backup-2* -mtime +7 -exec rm -v {} \; | sudo tee -a /var/www/backups/del.log
+mysqldump -u root --password=allahallah --all-databases > /var/www/backups/database-$(date +"%Y-%m-%d").sql 2> /var/www/backups/db-$(date +"%Y-%m-%d").log
+sudo zip /var/www/backups/database-$(date +"%Y-%m-%d").sql.zip -e -P allahallah /var/www/backups/database-$(date +"%Y-%m-%d").sql
+
+##
+
+sudo rm /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz
+sudo rm /var/www/backups/database-$(date +"%Y-%m-%d").sql

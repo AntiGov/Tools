@@ -1,0 +1,38 @@
+#!/bin/bash
+########################
+#Restore Backup Script by G66k##
+########################
+
+read -n1 -p "Enter 1 to restore web dir, 2 to restore mysql database, or 3 for both: " input
+echo
+case $input in
+  1) cd / ;
+      read -p "Enter date of backup [YYYY-MM-DD]: " date;
+      echo;
+      read -s -p "Password for files: " pass ;
+      echo;
+      sudo unzip -P $pass /var/www/backups/backup-$date.tar.gz.zip -d /;
+      sudo tar -xvzf backup-$date.tar.gz;
+      sudo rm backup-$date.tar.gz;;
+  2) cd /var/www/backups;
+      read -p "Enter date of backup [YYYY-MM-DD]: " date;
+      echo;
+      read -s -p "Password for files: " pass ;
+      echo;
+      sudo unzip -P $pass /var/www/backups/database-$date.sql.zip -d /;
+      mysql -u root --password=allahallah < database-$date.sql ;
+      sudo rm database-$date.sql;;
+  3) cd /var/www/backups ;
+      read -p "Enter date of backup [YYYY-MM-DD]: " date;
+      echo;
+      read -s -p "Password for files: " pass ;
+      echo;
+      sudo unzip -P $pass /var/www/backups/backup-$date.tar.gz.zip -d /;
+      sudo tar -xvzf backup-$date.tar.gz;
+      sudo rm backup-$date.tar.gz;
+      sudo unzip -P $pass /var/www/backups/database-$date.sql.zip -d /;
+      mysql -u root --password=allahallah < database-$date.sql ;
+      sudo rm database-$date.sql;;
+  *) echo "Please run program again and enter 1 2 or 3" ;;
+esac
+

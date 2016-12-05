@@ -1,0 +1,169 @@
+#!/bin/bash
+######################################
+#SSH-ATTACK-DETECTOR Script by G66k ##
+######################################
+# detected ssh attacker and banned it using iptables
+ 
+#owner info
+SENDMAILFROM="no-reply@g66k.gov";
+SENDMAILTO="g66k@g66k.gov";
+CC="otheruser@g66k.gov";
+
+#log file
+LOGFILE='/var/log/auth.log';
+
+#regex match
+REGEXP="sshd.*(f|F)ail.*(\=| )([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})";
+
+# regex group number that contains IP Address
+REGEXPIPPOS=3;
+
+# How many times match before block
+LIMIT=5;
+
+# iptables action (-j argument)
+IPTABLESACTION="DROP";
+
+# iptables chain (INPUT, OUTPUT, etc...)
+IPTABLESCHAIN="INPUT";
+
+# I = insert
+# A = append
+IPTABLESINSERT="I";
+
+# debug mode to test the script
+# 1=on
+# 0=off
+IPTABLESEXEC=1;
+
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# sending email
+# 1=on
+# 0=off
+SENDMAIL=1;
+
+#echo ""
+biniptables=$(which iptables);
+bingrep=$(which grep);
+binwc=$(which wc);
+bincurl=$(which curl);
+bincolumn=$(which column);
+binsendmail=$(which sendmail);
+shostname=$(hostname);
+sallipadd=$(hostname --all-ip-addresses);
+
+
+
+declare -A iparrhash;
+declare -A addedip;
+IPARR=();
+IPQNT=();
+COL0="\e[0m";  # no color
+COL1="\e[32m"; # green
+COL2="\e[93m"; # yellow
+COL3="\e[31m"; # red
+l=0;
+q=0;
+
+
+while read line; do
+	if [[ ${line} =~ $REGEXP ]]; then
+		addip="1";
+		for i in ${IPARR[@]}; do
+			if [ "${i}" = "${BASH_REMATCH[$REGEXPIPPOS]}" ]; then
+				addip='0';
+			fi
+		done
+
+		if [ ${addip} = "1" ]; then
+			l=`expr $l + 1`;
+			IPARR[$l]=${BASH_REMATCH[$REGEXPIPPOS]};
+			iparrhash[${BASH_REMATCH[$REGEXPIPPOS]}]=1;
+		else
+			iparrhash["${BASH_REMATCH[$REGEXPIPPOS]}"]=`expr ${iparrhash[${BASH_REMATCH[$REGEXPIPPOS]}]} + 1`;
+		fi
+	fi
+done <$LOGFILE
+
+if [ ${#iparrhash[@]} -eq 0 ]; then
+	#echo -e "Nothing to do here, exit.\n";
+	exit 0;
+fi
+
+somethinghappens=0;
+for s in "${!iparrhash[@]}"; do
+	if [ ${iparrhash["$s"]} -ge $LIMIT ]; then
+		#echo -e "[${COL1}Found${COL0}] $s more then ${LIMIT} times (${iparrhash["$s"]} match)"
+		#echo -e "\`-- [${COL1}Check${COL0}] if $s already exists in iptables..."
+		iptabout=$(${biniptables} -L -n | ${bingrep} $s | ${binwc} -l);
+                if [ $iptabout -gt 0 ]; then
+		     msg="[${COL1}Skip ${COL0}] $s already present in iptables."
+		else
+			if [ $IPTABLESEXEC -eq 1 ]; then
+				${biniptables} -${IPTABLESINSERT} ${IPTABLESCHAIN} -s ${s} -j ${IPTABLESACTION}
+			fi
+			#echo -e -- [${COL3}Add ${COL0}] Add IP $s to iptables (-j ${IPTABLESACTION})"
+			addedip["${s}"]=1;
+			somethinghappens=1;
+		fi
+	fi
+done
+
+iptables-save > /etc/iptables/rules.v4
+
+if [ $somethinghappens -eq 1 ]; then
+	ipout="";
+	telegramout="";
+	csvout="";
+	pipeout="";
+	mailout="";
+	table=();
+	i=1;
+	for s in "${!addedip[@]}"; do
+		
+               mailout="${mailout}- ${s}\\n";
+                telegramout="${telegramout}${s}%2C ";
+		csvout="${csvout}${s},";
+		pipeout="${pipeout}${s}|";
+		if [[ "$i" -lt 3 ]]; then
+			ipout="$ipout| $s - ";
+			i=`expr $i + 1`;
+		else
+			ipout="$ipout| $s\n";
+			i=1;
+		fi
+	done
+table+=('<!DOCTYPE html><html><head>');
+table+=('<style>table { border-collapse: collapse;width: 100%;}');
+table+=('th, td { text-align: left;padding: 8px;}');
+table+=('tr:nth-child(even){background-color: #f2f2f2}')
+table+=('th {background-color: #4CAF50;color: white;}</style>');
+table+=('</head><body><table border="1" cellpadding="1"><tbody>');
+table+=("<tr><th>IPAdress</th><th>Country</th><th>Status</th></tr>");
+for i in "${!addedip[@]}"; do
+       country=$(curl -s freegeoip.net/json/${i} | awk -F, '{print $3}' | cut -d ':' -f2 | sed 's/"//g')
+table+=("<tr><td>${i}</td><td>${country}</td><td>Blocked</td></tr>");
+done
+
+table+=("</tbody></table></body></html>");
+#echo -e "${table[@]}";
+
+
+if [ $SENDMAIL -eq 1 ]; then
+
+(
+echo "From: ${SENDMAILFROM} ";
+echo "To: ${SENDMAILTO}";
+echo "Cc: ${CC}";
+echo "Subject: Subject: Attack Detected - New iptables rules added";
+echo "Content-Type: text/html";
+echo "MIME-Version: 1.0";
+echo "";
+echo "{${table[@]}";
+) | ${binsendmail} -t
+
+fi
+
+fi
+

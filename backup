@@ -4,11 +4,11 @@
 ########################
 
 sudo tar -cvzf /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz --exclude=*.tar.gz --exclude=/var/www/backups /var/www 1> /var/www/backups/$(date +"%Y-%m-%d").log 2> /dev/null
-sudo zip /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz.zip -e -P allahallah /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz > /dev/null
+sudo zip /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz.zip -e -P password /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz > /dev/null
 sudo find /var/www/backups/backup-* -mtime +7 -exec rm -rf {} \; | sudo tee -a /var/www/backups/del.log > /dev/null
 sudo find /var/www/backups/database-* -mtime +7 -exec rm -rf {} \; | sudo tee -a /var/www/backups/del.log > /dev/null
-mysqldump -u root --password=allahallah --all-databases > /var/www/backups/database-$(date +"%Y-%m-%d").sql 2> /var/www/backups/db-$(date +"%Y-%m-%d").log 1> /dev/null
-sudo zip /var/www/backups/database-$(date +"%Y-%m-%d").sql.zip -e -P allahallah /var/www/backups/database-$(date +"%Y-%m-%d").sql > /dev/null
+mysqldump -u root --password=password --all-databases > /var/www/backups/database-$(date +"%Y-%m-%d").sql 2> /var/www/backups/db-$(date +"%Y-%m-%d").log 1> /dev/null
+sudo zip /var/www/backups/database-$(date +"%Y-%m-%d").sql.zip -e -P password /var/www/backups/database-$(date +"%Y-%m-%d").sql > /dev/null
 
 ##
 

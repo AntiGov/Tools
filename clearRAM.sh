@@ -1,5 +1,6 @@
 #!/bin/bash
-## Bash Script to clear cached memory on (Ubuntu/Debian) Linux
+#Author: G66K @ MA
+#Description: Bash Script to clear cached memory on (Ubuntu/Debian) Linux
 
 if [ "$(whoami)" != "root" ]
 then

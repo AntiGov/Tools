@@ -1,6 +1,6 @@
 #!/bin/bash
 ########################
-#Restore Backup Script by G66k##
+#Restore Backup Script by AntiGov##
 ########################
 
 read -n1 -p "Enter 1 to restore web dir, 2 to restore mysql database, or 3 for both: " input

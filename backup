@@ -1,6 +1,6 @@
 #!/bin/bash
 ########################
-#backup Script by G66k##
+#backup Script by AntiGov##
 ########################
 
 sudo tar -cvzf /var/www/backups/backup-$(date +"%Y-%m-%d").tar.gz --exclude=*.tar.gz --exclude=/var/www/backups /var/www 1> /var/www/backups/$(date +"%Y-%m-%d").log 2> /dev/null

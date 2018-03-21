@@ -1,13 +1,13 @@
 #!/bin/bash
 ######################################
-#SSH-ATTACK-DETECTOR Script by G66k ##
+#SSH-ATTACK-DETECTOR Script by AntiGov ##
 ######################################
 # detected ssh attacker and banned it using iptables
  
 #owner info
-SENDMAILFROM="no-reply@g66k.gov";
-SENDMAILTO="g66k@g66k.gov";
-CC="otheruser@g66k.gov";
+SENDMAILFROM="no-reply@AntiGov.gov";
+SENDMAILTO="AntiGov@AntiGov.gov";
+CC="otheruser@AntiGov.gov";
 
 #log file
 LOGFILE='/var/log/auth.log';
